@@ -1,7 +1,5 @@
+import UsersList from "./UsersList";
+
 export default function UserPickers () {
-    return (
-        <select>
-            <option>Users</option>
-        </select>
-    )
+    return <UsersList/>
 }
