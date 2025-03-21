@@ -1,5 +1,13 @@
 import UsersList from "./UsersList";
+import data from "../../static.json"
 
 export default function UserPickers () {
-    return <UsersList/>
+    
+    return (
+        <select>
+            {data.users.map(u => (
+                <option key={u.id}>{u.name}</option>
+            ))}
+        </select>
+    )
 }
