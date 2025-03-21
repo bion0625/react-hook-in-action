@@ -1,4 +1,3 @@
-import UsersList from "./UsersList";
 import data from "../../static.json"
 
 export default function UserPickers () {
