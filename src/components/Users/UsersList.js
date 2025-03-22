@@ -1,14 +1,24 @@
-import { Fragment, useState } from "react"
-import data from "../../static.json"
+import { Fragment, useEffect, useState } from "react"
+import { CgSpinner } from "react-icons/cg";
 
 export default function UsersList () {
     const [userIndex, setUserIndex] = useState(0);
-    const user = data.users[userIndex];
+    const [users, setUsers] = useState(null);
+
+    useEffect(() => {
+        fetch("http://localhost:3001/users")
+        .then(res => res.json())
+        .then(data => setUsers(data));
+    },[]);
+
+    if (users == null) return <CgSpinner/>;
+
+    const user = users[userIndex];
 
     return (
         <Fragment>
             <ul className="users items-list-nav">
-                {data.users.map((u, i) => (
+                {users.map((u, i) => (
                     <li key={u.id} className={i === userIndex ? "selected" : null} >
                         <button className="btn" onClick={() => setUserIndex(i)}>{u.name}</button>
                     </li>

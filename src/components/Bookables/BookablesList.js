@@ -3,7 +3,8 @@ import data from "../../static.json"
 import { FaArrowRight } from "react-icons/fa";
 import reducer from "./reducer";
 
-const { bookables, days, sessions } = data;
+const { days, sessions } = data;
+const bookables = [];
 const groups = [...new Set(bookables.map(b => b.group))];
 const initialState = {
     group: groups[1],
