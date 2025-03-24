@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useReducer } from "react";
+import { Fragment, useEffect, useReducer, useRef } from "react";
 import data from "../../static.json"
 import { FaArrowRight } from "react-icons/fa";
 import reducer from "./reducer";
@@ -24,14 +24,26 @@ export default function BookablesList () {
     
     const bookablesInGroup = bookables.filter(b => b.group === group);
     const bookable = bookablesInGroup[bookableIndex];
-
     const groups = [...new Set(bookables.map(b => b.group))];
+
+    const timeRef = useRef(null);
+
+    const stopPresentation = () => {
+        clearInterval(timeRef.current);
+    };
 
     useEffect(() => {
         dispatch({tpe: "FETCH_BOOKABLES_REQUEST"});
         getData("http://localhost:3001/bookables")
         .then(data => dispatch({type: "FETCH_BOOKABLES_SUCCESS", payload: data}))
         .catch(error => dispatch({type: "FETCH_BOOKABLES_ERROR", payload: error}));
+    }, []);
+
+    useEffect(() => {
+        timeRef.current = setInterval(() => {
+            dispatch({type: "NEXT_BOOKABLE"});
+        }, 3000);
+        return stopPresentation;
     }, []);
 
     function changeGroup (e) {
@@ -91,6 +103,9 @@ export default function BookablesList () {
                                     <input type="checkbox" checked={hasDetails} onChange={toggleDetails}/>
                                     Show Details
                                 </label>
+                                <button className="btn" onClick={stopPresentation}>
+                                    Stop
+                                </button>
                             </span>
                         </div>
 
