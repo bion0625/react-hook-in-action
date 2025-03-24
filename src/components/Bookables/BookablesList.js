@@ -26,24 +26,13 @@ export default function BookablesList () {
     const bookable = bookablesInGroup[bookableIndex];
     const groups = [...new Set(bookables.map(b => b.group))];
 
-    const timeRef = useRef(null);
-
-    const stopPresentation = () => {
-        clearInterval(timeRef.current);
-    };
+    const nextButtonRef = useRef();
 
     useEffect(() => {
         dispatch({tpe: "FETCH_BOOKABLES_REQUEST"});
         getData("http://localhost:3001/bookables")
         .then(data => dispatch({type: "FETCH_BOOKABLES_SUCCESS", payload: data}))
         .catch(error => dispatch({type: "FETCH_BOOKABLES_ERROR", payload: error}));
-    }, []);
-
-    useEffect(() => {
-        timeRef.current = setInterval(() => {
-            dispatch({type: "NEXT_BOOKABLE"});
-        }, 3000);
-        return stopPresentation;
     }, []);
 
     function changeGroup (e) {
@@ -58,6 +47,7 @@ export default function BookablesList () {
             type: "SET_BOOKABLE",
             payload: selectedIndex,
         });
+        nextButtonRef.current.focus();
     };
 
     function nextBookable () {
@@ -86,7 +76,7 @@ export default function BookablesList () {
                     ))}
                 </ul>
                 <p>
-                    <button className="btn" onClick={nextBookable} autoFocus>
+                    <button className="btn" onClick={nextBookable} autoFocus ref={nextButtonRef}>
                         <FaArrowRight/>
                         <span>Next</span>
                     </button>
@@ -103,9 +93,6 @@ export default function BookablesList () {
                                     <input type="checkbox" checked={hasDetails} onChange={toggleDetails}/>
                                     Show Details
                                 </label>
-                                <button className="btn" onClick={stopPresentation}>
-                                    Stop
-                                </button>
                             </span>
                         </div>
 
