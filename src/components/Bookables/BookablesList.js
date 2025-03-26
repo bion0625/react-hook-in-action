@@ -35,7 +35,6 @@ export default function BookablesList ({bookable, setBookable}) {
 
     function changeBookable (b) {
         setBookable(b);
-        nextButtonRef.current.focus();
     };
 
     function nextBookable () {
