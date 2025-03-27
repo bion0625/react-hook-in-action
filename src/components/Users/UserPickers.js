@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react"
 import { CgSpinner } from "react-icons/cg";
 import getData from "../../util/api";
-import UserContext from "./UserContext";
+import UserContext, { UserSetContext } from "./UserContext";
 
 export default function UserPickers () {
 
-    const {user, setUser} = useContext(UserContext);
+    const user = useContext(UserContext);
+    const setUser = useContext(UserSetContext);
     const [users, setUsers] = useState(null);
     const [error, setError] = useState(null);
 

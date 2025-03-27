@@ -5,7 +5,7 @@ import { FaEdit } from "react-icons/fa";
 
 const BookingDetails = ({booking, bookable}) => {
 
-    const {user} = useContext(UserContext);
+    const user = useContext(UserContext);
 
     const isBooker = booking && user && (booking.bookerId == user.id);
 
@@ -13,7 +13,6 @@ const BookingDetails = ({booking, bookable}) => {
         <div className="booking-details">
             <h2>
                 Booking Details
-                {user?.name}
                 {isBooker && (
                     <span className="controls">
                         <button className="btn">
