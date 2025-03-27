@@ -7,15 +7,11 @@ import UserPickers from './Users/UserPickers';
 import UsersPage from './Users/UsersPage';
 import BookingsPage from './Bookings/BookingsPage';
 import BookablesPage from './Bookables/BookablesPage';
-import UserContext from './Users/UserContext';
-import { useState } from 'react';
+import { UserProvider } from './Users/UserContext';
 
 function App() {
-
-  const [user, setUser] = useState();
-
   return (
-    <UserContext.Provider value={{user, setUser}}>
+    <UserProvider>
       <BrowserRouter>
         <div className='App'>
           <header>
@@ -52,7 +48,7 @@ function App() {
           </Routes>
         </div>
       </BrowserRouter>
-    </UserContext.Provider>
+    </UserProvider>
   );
 }
 
