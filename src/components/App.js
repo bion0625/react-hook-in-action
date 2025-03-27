@@ -15,7 +15,7 @@ function App() {
   const [user, setUser] = useState();
 
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={{user, setUser}}>
       <BrowserRouter>
         <div className='App'>
           <header>
@@ -42,7 +42,7 @@ function App() {
               </ul>
             </nav>
 
-            <UserPickers user={user} setUser={setUser} />
+            <UserPickers/>
           </header>
 
           <Routes>

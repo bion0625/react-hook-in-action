@@ -5,7 +5,7 @@ import { FaEdit } from "react-icons/fa";
 
 const BookingDetails = ({booking, bookable}) => {
 
-    const user = useContext(UserContext);
+    const {user} = useContext(UserContext);
 
     const isBooker = booking && user && (booking.bookerId == user.id);
 
