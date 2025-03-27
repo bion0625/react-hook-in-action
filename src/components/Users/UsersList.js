@@ -11,7 +11,6 @@ export default function UsersList ({user, setUser}) {
     useEffect(() => {
         getData("http://localhost:3001/users")
         .then(data => {
-            setUser(data[0]);
             setUsers(data);
             setIsloading(false);
         })

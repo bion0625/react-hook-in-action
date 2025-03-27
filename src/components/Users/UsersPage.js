@@ -1,16 +1,24 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import UsersDetails from "./UsersDetails";
 import UsersList from "./UsersList";
-import { CgSpinner } from "react-icons/cg";
+import UserContext from "./UserContext";
 
 export default function UsersPage () {
 
     const [user, setUser] = useState(null);
 
+    const loggedInUser = useContext(UserContext);
+
+    console.log("user:", user);
+    console.log("loggedInUser:", loggedInUser);
+    const currentUser = user || loggedInUser;
+    
+    console.log("currentUser:", currentUser);
+
     return (
         <main className="users-page">
-            <UsersList user={user} setUser={setUser}/>
-            <UsersDetails user={user}/>
+            <UsersList user={currentUser} setUser={setUser}/>
+            <UsersDetails user={currentUser}/>
         </main>
     )
 }
