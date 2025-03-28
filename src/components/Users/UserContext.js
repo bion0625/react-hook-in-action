@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const UserContext = createContext();
 
@@ -15,5 +15,14 @@ export const UserProvider = ({children}) => {
     </UserContext.Provider>
     )
 }
+
+export const useUser = () => {
+    const user = useContext(UserContext);
+    const setUser = useContext(UserSetContext);
+
+    if (!setUser) throw new Error(`The UseProvider is missing.`);
+
+    return [user, setUser];
+};
 
 export default UserContext;
