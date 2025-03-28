@@ -1,28 +1,13 @@
-import { useEffect, useState } from "react";
-import getData from "../../util/api"
 import { CgSpinner } from "react-icons/cg";
+import useFetch from "../../util/useFetch";
 
 export default function UsersList ({user, setUser}) {
 
-    const [error, setError] = useState(null);
-    const [isLoading, setIsloading] = useState(true);
-    const [users, setUsers] = useState(null);
+    const {data : users = [], status, error} = useFetch("http://localhost:3001/users");
 
-    useEffect(() => {
-        getData("http://localhost:3001/users")
-        .then(data => {
-            setUsers(data);
-            setIsloading(false);
-        })
-        .catch(error => {
-            setError(error);
-            setIsloading(false);
-        });
-    },[setUser]);
+    if (status === "error") return <p>{error.message}</p>
 
-    if (error) return <p>{error.message}</p>
-
-    if (isLoading) return <p><CgSpinner/> Loading users...</p>;
+    if (status === "loading") return <p><CgSpinner/> Loading users...</p>;
 
     return (
         <ul className="users items-list-nav">
