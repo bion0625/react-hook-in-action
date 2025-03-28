@@ -1,35 +1,11 @@
-import { Fragment, useEffect, useMemo, useState } from "react";
-import { getGrid, transformBookings } from "./grid-builder";
-import { getBookings } from "../../util/api";
+import { Fragment} from "react";
 import { FaSpinner } from "react-icons/fa";
+import { useBookings, useGrid } from "./bookingsHooks";
 
 const BookingsGrid = ({week, bookable, booking, setBooking}) => {
 
-    const [bookings, setBookings] = useState(null);
-    const [error, setError] = useState(null);
-
-    const {grid, sessions, dates} = useMemo(
-        () => bookable ? getGrid(bookable, week.start) : {},
-        [bookable, week.start]
-    );
-
-    useEffect(() => {
-        if (bookable) {
-            let doUpdate = true;
-
-            setBookings(null);
-            setError(false);
-            setBooking(null);
-
-            getBookings(bookable.id, week.start, week.end)
-            .then(resp => {
-                if (doUpdate) setBookings(transformBookings(resp));
-            })
-            .catch(setError);
-
-            return () => doUpdate = false;
-        }
-    }, [week, bookable, setBooking]);
+    const {bookings, status, error} = useBookings(bookable?.id, week.start, week.end);
+    const {grid, sessions, dates} = useGrid(bookable, week.start);
 
     const cell = (session, date) => {
         const cellData = bookings?.[session]?.[date] || grid[session][date];
@@ -42,16 +18,16 @@ const BookingsGrid = ({week, bookable, booking, setBooking}) => {
         )
     }
 
-    if (!grid) return <FaSpinner/>
+    if (!grid) return <p>Waiting for bookable and week details...</p>
 
     return (
         <Fragment>
-            {error && (
+            {status === "error" && (
                 <p className="bookingsError">
                     {`There was a problem loading the bookings data (${error})`}
                 </p>
             )}
-            <table className={bookings ? "bookingsGrid active" : "bookingsGrid"}>
+            <table className={status === "success" ? "bookingsGrid active" : "bookingsGrid"}>
                 <thead>
                     <tr>
                         <th>
