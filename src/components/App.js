@@ -43,7 +43,7 @@ function App() {
 
           <Routes>
             <Route path='/bookings' element={<BookingsPage />}></Route>
-            <Route path='/bookables' element={<BookablesPage />}></Route>
+            <Route path='/bookables/*' element={<BookablesPage />}></Route>
             <Route path='/users' element={<UsersPage />}></Route>
           </Routes>
         </div>

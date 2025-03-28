@@ -1,41 +1,28 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { FaArrowRight } from "react-icons/fa";
-import { CgSpinner } from "react-icons/cg";
-import useFetch from "../../util/useFetch";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function BookablesList ({bookable, setBookable}) {
-
-    const {data: bookables = [], status, error} = useFetch("http://localhost:3001/bookables");
+export default function BookablesList ({bookable, bookables, getUrl}) {
 
     const group = bookable?.group;
-
     const bookablesInGroup = bookables.filter(b => b.group === group);
     const groups = [...new Set(bookables.map(b => b.group))];
 
+    const navigate = useNavigate();
+
     const nextButtonRef = useRef();
 
-    useEffect(() => {
-        setBookable(bookables[0]);
-    }, [bookables, setBookable]);
-
     function changeGroup (e) {
-        setBookable(bookables.filter(b => b.group === e.target.value)[0]);
+        const bookablesInSelectedGroup = bookables.filter(b => b.group === e.target.value);
+        navigate(getUrl(bookablesInSelectedGroup[0].id));
     }
-
-    function changeBookable (b) {
-        setBookable(b);
-    };
 
     function nextBookable () {
         const i = bookablesInGroup.indexOf(bookable);
         const nextIndex = (i + 1) % bookablesInGroup.length;
         const nextBookable = bookablesInGroup[nextIndex];
-        setBookable(nextBookable);
+        navigate(getUrl(nextBookable.id));
     }
-
-    if (status === "error") return <p>{error.message}</p>
-
-    if (status === "loading") return <p><CgSpinner/> Loading bookables...</p>
 
     return (
         <div>
@@ -45,7 +32,7 @@ export default function BookablesList ({bookable, setBookable}) {
             <ul className="bookables items-list-nav">
                 {bookablesInGroup.map(b => (
                     <li key={b.id} className={b.id === bookable.id ? "selected" : null}>
-                        <button className="btn" onClick={() => changeBookable(b)}>{b.title}</button>
+                        <Link to={getUrl(b.id)} className="btn" replace={true}>{b.title}</Link>
                     </li>
                 ))}
             </ul>
