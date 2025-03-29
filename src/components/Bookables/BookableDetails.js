@@ -1,5 +1,7 @@
 import { useState } from "react";
 import data from "../../static.json";
+import { Link } from "react-router-dom";
+import { FaEdit } from "react-icons/fa";
 
 const BookableDetails = ({bookable}) => {
     const {days, sessions} = data;
@@ -18,6 +20,10 @@ const BookableDetails = ({bookable}) => {
                         <input type="checkbox" checked={hasDetails} onChange={toggleDetails}/>
                         Show Details
                     </label>
+                    <Link to={`/bookables/${bookable.id}/edit`} replace={true} className="btn btn-header">
+                        <FaEdit/>
+                        <span>Edit</span>
+                    </Link>
                 </span>
             </div>
 
