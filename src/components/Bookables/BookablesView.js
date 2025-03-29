@@ -1,13 +1,15 @@
 import BookablesList from "./BookablesList";
 import BookableDetails from "./BookableDetails";
-import useFetch from "../../util/useFetch";
 import { Link, useParams } from "react-router-dom";
 import { CgSpinner } from "react-icons/cg";
 import { FaPlus } from "react-icons/fa";
+import { useQuery } from "@tanstack/react-query";
+import getData from "../../util/api";
 
 const BookablesView = () => {
 
-    const {data: bookables = [], status, error} = useFetch("http://localhost:3001/bookables");
+    const {data: bookables = [], status, error} = 
+        useQuery({queryKey: ["bookables"], queryFn: () => getData("http://localhost:3001/bookables")});
 
     const {id} = useParams();
 

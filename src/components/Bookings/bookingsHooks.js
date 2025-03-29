@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { isDate, shortISO } from "../../util/date-wrangler";
-import useFetch from "../../util/useFetch";
 import { getGrid, transformBookings } from "./grid-builder";
 import { useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import getData from "../../util/api";
 
 export const useBookings = (bookableId, startDate, endDate) => {
     const start = shortISO(startDate);
@@ -13,7 +14,8 @@ export const useBookings = (bookableId, startDate, endDate) => {
     // const queryString = `bookableId=${bookableId}&date_gte=${start}&date_lte=${end}`;
     const queryString = `bookableId=${bookableId}`;// json-server 기간쿼리 확인되면 삭제 후 윗줄 주석 해제
 
-    const query = useFetch(`${urlRoot}?${queryString}`);
+    // const query = useQuery({queryKey: [bookableId, startDate, endDate], queryFn: () => getData(`${urlRoot}?${queryString}`)});
+    const query = useQuery({queryKey: ["bookings", bookableId], queryFn: () => getData(`${urlRoot}?${queryString}`)});// json-server 기간쿼리 확인되면 삭제 후 윗줄 주석 해제
 
     return {
         bookings: query.data ? transformBookings(query.data) : {},

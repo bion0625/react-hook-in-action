@@ -1,11 +1,12 @@
 import { useEffect } from "react"
 import { CgSpinner } from "react-icons/cg";
 import { useUser } from "./UserContext";
-import useFetch from "../../util/useFetch";
+import { useQuery } from "@tanstack/react-query";
+import getData from "../../util/api";
 
 export default function UserPickers () {
-
-    const {data: users = [], status, error} = useFetch("http://localhost:3001/users");
+    
+    const {data: users = [], status, error} = useQuery({queryKey: ["users"], queryFn: () => getData("http://localhost:3001/users")});
 
     const [user, setUser] = useUser();
 

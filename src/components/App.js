@@ -8,47 +8,52 @@ import UsersPage from './Users/UsersPage';
 import BookingsPage from './Bookings/BookingsPage';
 import BookablesPage from './Bookables/BookablesPage';
 import { UserProvider } from './Users/UserContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <UserProvider>
-      <BrowserRouter>
-        <div className='App'>
-          <header>
-            <nav>
-              <ul>
-                <li>
-                  <Link to="/bookings" className='btn btn-header'>
-                    <FaCalendarAlt />
-                    <span>Bookings</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/bookables" className='btn btn-header'>
-                    <FaDoorOpen />
-                    <span>Bookables</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/users" className='btn btn-header'>
-                    <FaUsers />
-                    <span>Users</span>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <BrowserRouter>
+          <div className='App'>
+            <header>
+              <nav>
+                <ul>
+                  <li>
+                    <Link to="/bookings" className='btn btn-header'>
+                      <FaCalendarAlt />
+                      <span>Bookings</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/bookables" className='btn btn-header'>
+                      <FaDoorOpen />
+                      <span>Bookables</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/users" className='btn btn-header'>
+                      <FaUsers />
+                      <span>Users</span>
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
 
-            <UserPickers/>
-          </header>
+              <UserPickers/>
+            </header>
 
-          <Routes>
-            <Route path='/bookings' element={<BookingsPage />}></Route>
-            <Route path='/bookables/*' element={<BookablesPage />}></Route>
-            <Route path='/users' element={<UsersPage />}></Route>
-          </Routes>
-        </div>
-      </BrowserRouter>
-    </UserProvider>
+            <Routes>
+              <Route path='/bookings' element={<BookingsPage />}></Route>
+              <Route path='/bookables/*' element={<BookablesPage />}></Route>
+              <Route path='/users' element={<UsersPage />}></Route>
+            </Routes>
+          </div>
+        </BrowserRouter>
+      </UserProvider>
+    </QueryClientProvider>
   );
 }
 

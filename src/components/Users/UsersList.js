@@ -1,9 +1,10 @@
 import { CgSpinner } from "react-icons/cg";
-import useFetch from "../../util/useFetch";
+import { useQuery } from "@tanstack/react-query";
+import getData from "../../util/api";
 
 export default function UsersList ({user, setUser}) {
 
-    const {data : users = [], status, error} = useFetch("http://localhost:3001/users");
+    const {data: users = [], status, error} = useQuery({queryKey: ["users"], queryFn: () => getData("http://localhost:3001/users")});
 
     if (status === "error") return <p>{error.message}</p>
 
