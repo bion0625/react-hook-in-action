@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { isDate, shortISO } from "../../util/date-wrangler";
 import { getGrid, transformBookings } from "./grid-builder";
 import { useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import getData from "../../util/api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import getData, { createItem, deleteItem, editItem } from "../../util/api";
 
 export const useBookings = (bookableId, startDate, endDate) => {
     const start = shortISO(startDate);
@@ -54,5 +54,64 @@ export const useBookingsParams = () => {
         date,
         bookableId: hasId ? idInt : undefined,
         setBookingsDate
+    };
+};
+
+export const useCreateBooking = (key) => {
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: item => createItem("http://localhost:3001/bookings", item),
+        onSuccess: booking => {
+            queryClient.invalidateQueries(key);
+            const bookings = queryClient.getQueryData(key) || [];
+            queryClient.setQueryData({
+                queryKey: key,
+                queryFn: () => [...bookings, booking]
+            })
+        }
+    });
+    return {
+        createBooking: mutation.mutate,
+        isCreating: mutation.isLoading
+    };
+};
+
+export const useUpdateBooking = (key) => {
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: item => editItem(`http://localhost:3001/bookings/${item.id}`, item),
+        onSuccess: booking => {
+            queryClient.invalidateQueries(key);
+            const bookings = queryClient.getQueryData(key) || [];
+            const bookingIndex = bookings.findIndex(b => b.id == booking.id);
+            bookings[bookingIndex] = booking;
+            queryClient.setQueryData({
+                queryKey: key,
+                queryFn: () => bookings
+            });
+        }
+    });
+    return {
+        updateBooking: mutation.mutate,
+        isUpdating: mutation.isLoading
+    };
+};
+
+export const useDeleteBooking = (key) => {
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: id => deleteItem(`http://localhost:3001/bookings/${id}`),
+        onSuccess: (resp, id) => {
+            queryClient.invalidateQueries(key);
+            const bookings = queryClient.getQueryData(key) || [];
+            queryClient.setQueryData({
+                queryKey: key,
+                queryFn: () => bookings.filter(b => b.id != id)
+            })
+        }
+    });
+    return {
+        deleteBooking: mutation.mutate,
+        isDeleting: mutation.isLoading
     };
 };
