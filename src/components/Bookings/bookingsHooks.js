@@ -38,8 +38,11 @@ export const useBookingsParams = () => {
 
     const date = isDate(searchDate) ? new Date(searchDate) : new Date();
 
-    const idInt = parseInt(bookableId, 10);
-    const hasId = !isNaN(idInt);
+    // const idInt = parseInt(bookableId, 10);
+    // const hasId = !isNaN(idInt);
+    const idInt = bookableId;
+    const hasId = true;
+    // json-server가 id를 문자열로 받아서 생긴 오류 수정; 만약 숫자로 받는다면 위 두 줄 삭제 후 그 위의 두 줄 주석 해제제
 
     const setBookingsDate = date => {
         const params = {};

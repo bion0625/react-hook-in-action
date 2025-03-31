@@ -46,12 +46,12 @@ const useBookable = (id) => {
         queryKey: ["bookable", id],
         queryFn: () => getData(`http://localhost:3001/bookables/${id}`),
         refetchOnWindowFocus: false,
-        initialData: queryClient.getQueryData("bookables")?.find(b => b.id == id)
+        initialData: queryClient.getQueryData(["bookables"])?.find(b => b.id == id)
     });
 }
 
 const updateBookablesCache = (bookable, queryClient) => {
-    const bookables = queryClient.getQueryData("bookables") || [];
+    const bookables = queryClient.getQueryData(["bookables"]) || [];
 
     const bookableIndex = bookables.findIndex(b => b.id == bookable.id);
 
@@ -100,7 +100,7 @@ const useDeleteBookable = () => {
     const mutation = useMutation({
         mutationFn: bookable => deleteItem(`http://localhost:3001/bookables/${bookable.id}`),
         onSuccess: (response, bookable) => {
-            const bookables = queryClient.getQueryData("bookables") || [];
+            const bookables = queryClient.getQueryData(["bookables"]) || [];
 
             queryClient.setQueryData({
                 queryKey: ["bookables"],

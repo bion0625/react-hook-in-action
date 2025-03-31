@@ -6,7 +6,8 @@ import { FaCalendarAlt, FaDoorOpen, FaSpinner, FaUsers } from 'react-icons/fa';
 import UserPickers from './Users/UserPickers';
 import { UserProvider } from './Users/UserContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { lazy, Suspense } from 'react';
+import { Fragment, lazy, Suspense } from 'react';
+import ErrorBoundary from '../UI/ErrorBoundary';
 
 const UsersPage = lazy(() => import('./Users/UsersPage'));
 const BookingsPage = lazy(() => import('./Bookings/BookingsPage'));
@@ -47,13 +48,20 @@ function App() {
               <UserPickers/>
             </header>
 
-            <Suspense fallback={<FaSpinner/>}>
-              <Routes>
-                <Route path='/bookings' element={<BookingsPage />}></Route>
-                <Route path='/bookables/*' element={<BookablesPage />}></Route>
-                <Route path='/users' element={<UsersPage />}></Route>
-              </Routes>
-            </Suspense>
+            <ErrorBoundary fallback={
+              <Fragment>
+                <h1>Something went wrong!</h1>
+                <p>Try reloading the page.</p>
+              </Fragment>
+            }>
+              <Suspense fallback={<FaSpinner/>}>
+                <Routes>
+                  <Route path='/bookings' element={<BookingsPage />}></Route>
+                  <Route path='/bookables/*' element={<BookablesPage />}></Route>
+                  <Route path='/users' element={<UsersPage />}></Route>
+                </Routes>
+              </Suspense>
+            </ErrorBoundary>
           </div>
         </BrowserRouter>
       </UserProvider>
