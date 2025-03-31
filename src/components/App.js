@@ -2,13 +2,15 @@
 
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import '../App.css';
-import { FaCalendarAlt, FaDoorOpen, FaUsers } from 'react-icons/fa';
+import { FaCalendarAlt, FaDoorOpen, FaSpinner, FaUsers } from 'react-icons/fa';
 import UserPickers from './Users/UserPickers';
-import UsersPage from './Users/UsersPage';
-import BookingsPage from './Bookings/BookingsPage';
-import BookablesPage from './Bookables/BookablesPage';
 import { UserProvider } from './Users/UserContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { lazy, Suspense } from 'react';
+
+const UsersPage = lazy(() => import('./Users/UsersPage'));
+const BookingsPage = lazy(() => import('./Bookings/BookingsPage'));
+const BookablesPage = lazy(() => import('./Bookables/BookablesPage'));
 
 const queryClient = new QueryClient();
 
@@ -45,11 +47,13 @@ function App() {
               <UserPickers/>
             </header>
 
-            <Routes>
-              <Route path='/bookings' element={<BookingsPage />}></Route>
-              <Route path='/bookables/*' element={<BookablesPage />}></Route>
-              <Route path='/users' element={<UsersPage />}></Route>
-            </Routes>
+            <Suspense fallback={<FaSpinner/>}>
+              <Routes>
+                <Route path='/bookings' element={<BookingsPage />}></Route>
+                <Route path='/bookables/*' element={<BookablesPage />}></Route>
+                <Route path='/users' element={<UsersPage />}></Route>
+              </Routes>
+            </Suspense>
           </div>
         </BrowserRouter>
       </UserProvider>
