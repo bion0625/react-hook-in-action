@@ -8,15 +8,16 @@ import getData from "../../util/api";
 
 const BookablesView = () => {
 
-    const {data: bookables = [], status, error} = 
-        useQuery({queryKey: ["bookables"], queryFn: () => getData("http://localhost:3001/bookables")});
+    const {data: bookables = []} = 
+        useQuery({
+            queryKey: ["bookables"], 
+            queryFn: () => getData("http://localhost:3001/bookables"),
+            suspense: true
+        });
 
     const {id} = useParams();
 
     const bookable = bookables.find(b => b.id == id) || bookables[0];
-
-    if (status === "error") return <p>{error.message}</p>
-    if (status === "loading") return <CgSpinner/>
 
     return (
         <main className="bookables-page">

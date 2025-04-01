@@ -8,7 +8,11 @@ import getData from "../../util/api";
 
 export default function BookingsPage () {
 
-    const {data: bookables=[], status, error} = useQuery({queryKey: ["bookables"], queryFn: () => getData("http://localhost:3001/bookables")});
+    const {data: bookables=[]} = useQuery({
+        queryKey: ["bookables"], 
+        queryFn: () => getData("http://localhost:3001/bookables"), 
+        suspense: true
+    });
     const {date, bookableId} = useBookingsParams();
 
     const bookable = bookables.find(b => b.id == bookableId) || bookables[0];
@@ -17,10 +21,6 @@ export default function BookingsPage () {
         const root = `/bookings?bookableId=${id}`;
         return date ? `${root}&date=${shortISO(date)}` : root;
     };
-
-    if (status === "error") return <p>{error.message}</p>;
-
-    if (status === "loading") return <FaSpinner/>
 
     return (
         <main className="bookings-page">

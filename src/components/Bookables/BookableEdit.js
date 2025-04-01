@@ -7,7 +7,7 @@ import BookableForm from "./BookableForm";
 
 const BookableEdit = () => {
     const {id} = useParams();
-    const {data, isLoading} = useBookable(id);
+    const {data} = useBookable(id);
     const formState = useFormState(data);
 
     const {
@@ -31,7 +31,7 @@ const BookableEdit = () => {
 
     if (isUpdateError || isDeleteError) return <p>{updateErrorr?.message || deleteError.message}</p>
 
-    if (isLoading || isUpdating || isDeleting) return <FaSpinner/>;
+    if (isUpdating || isDeleting) return <FaSpinner/>;
 
     return (
         <BookableForm formState={formState} handleSubmit={handleSubmit} handleDelete={handleDelete}/>
@@ -46,7 +46,8 @@ const useBookable = (id) => {
         queryKey: ["bookable", id],
         queryFn: () => getData(`http://localhost:3001/bookables/${id}`),
         refetchOnWindowFocus: false,
-        initialData: queryClient.getQueryData(["bookables"])?.find(b => b.id == id)
+        initialData: queryClient.getQueryData(["bookables"])?.find(b => b.id == id),
+        suspense: true
     });
 }
 

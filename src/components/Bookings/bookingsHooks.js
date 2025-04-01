@@ -15,11 +15,14 @@ export const useBookings = (bookableId, startDate, endDate) => {
     const queryString = `bookableId=${bookableId}`;// json-server 기간쿼리 확인되면 삭제 후 윗줄 주석 해제
 
     // const query = useQuery({queryKey: [bookableId, startDate, endDate], queryFn: () => getData(`${urlRoot}?${queryString}`)});
-    const query = useQuery({queryKey: ["bookings", bookableId], queryFn: () => getData(`${urlRoot}?${queryString}`)});// json-server 기간쿼리 확인되면 삭제 후 윗줄 주석 해제
+    const query = useQuery({
+        queryKey: ["bookings", bookableId], 
+        queryFn: () => getData(`${urlRoot}?${queryString}`), 
+        suspense: true
+    });// json-server 기간쿼리 확인되면 삭제 후 윗줄 주석 해제
 
     return {
-        bookings: query.data ? transformBookings(query.data) : {},
-        ...query
+        bookings: query.data ? transformBookings(query.data) : {}
     };
 };
 
