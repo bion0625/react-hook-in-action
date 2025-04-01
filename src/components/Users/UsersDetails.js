@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import getData from "../../util/api";
 import Avatar from "./Avatar";
 
-const UsersDetails = ({userID}) => {
+const UsersDetails = ({userID, isPending}) => {
     const {data: user} = useQuery({
         queryKey: ["user", userID],
         queryFn: () => getData(`http://localhost:3001/users/${userID}`),
@@ -10,7 +10,7 @@ const UsersDetails = ({userID}) => {
     });
 
     return user ? (
-        <div className="item user">
+        <div className={isPending ? "item user user-pending" : "item user"}>
             <div className="item-header">
                 <h2>{user.name}</h2>
             </div>

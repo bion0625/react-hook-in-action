@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense, useDeferredValue, useState } from "react";
 import UsersDetails from "./UsersDetails";
 import UsersList from "./UsersList";
 import { useUser } from "./UserContext";
@@ -12,6 +12,10 @@ export default function UsersPage () {
     const [selectedUser, setSelectedUser] = useState(null);
     const user = selectedUser || loggedInUser;
     const queryClient = useQueryClient();
+
+    const defferredUser = useDeferredValue(user) || user;
+
+    const isPending = defferredUser !== user;
 
     const switchUser = (nextUser) => {
 
@@ -34,9 +38,9 @@ export default function UsersPage () {
 
     return user ? (
         <main className="users-page">
-            <UsersList user={user} setUser={switchUser}/>
+            <UsersList user={user} setUser={switchUser} isPending={isPending}/>
             <Suspense fallback={<FaSpinner/>}>
-                <UsersDetails userID={user.id}/>
+                <UsersDetails userID={defferredUser.id} isPending={isPending}/>
             </Suspense>
         </main>
     ) : null
