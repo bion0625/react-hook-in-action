@@ -21,7 +21,7 @@ const Booking = ({booking, bookable}) => {
             {notes && (
                 <Fragment>
                     <label>Notes</label>
-                    <p>{notes}</p>
+                    <pre>{notes}</pre>
                 </Fragment>
             )}
         </div>

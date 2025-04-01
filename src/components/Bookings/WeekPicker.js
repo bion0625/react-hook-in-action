@@ -28,7 +28,7 @@ export default function WeekPicker () {
                 </button>
 
                 <span>
-                    <input type="text" ref={textboxRef} placeholder="e.g. 2020-09-02" defaultValue="2020-06-24"/>
+                    <input type="text" ref={textboxRef} placeholder="e.g. 2020-09-02" defaultValue={new Date().toISOString().split('T')[0]}/>
                     <button className="to btn" onClick={() => goToDate(textboxRef.current.value)}>
                         <FaCalendarCheck/>
                         <span>Go</span>

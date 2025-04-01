@@ -47,7 +47,12 @@ const BookingsTable = ({bookings}) => {
 const UserBookings = ({id}) => {
     const {data: bookings} = useQuery({
         queryKey: ["userbookings", id],
-        queryFn: () => getData(`http://localhost:3001/bookings?bookerId=${id}&_sort=date`, 3000),
+        queryFn: () => getData(`http://localhost:3001/bookings?bookerId=${id}&_sort=date`)
+            .then(res => {
+                const today = new Date();
+                const todayString = today.toISOString().split('T')[0];
+                return res.filter(booking => booking.date >= todayString);
+            }),
         suspense: true
     });
 

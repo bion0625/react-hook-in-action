@@ -1,12 +1,8 @@
-const getData = (url, delay = 0) => {
+const getData = (url) => {
     return fetch(url)
     .then(res => {
         if (!res.ok) throw new Error(`There was a problem fetching data.`);
-        return res.json().then(json => {
-            return new Promise(resolve => {
-                setTimeout(() => resolve(json), delay)
-            })
-        });
+        return res.json()
     });
 };
 

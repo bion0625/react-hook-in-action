@@ -29,9 +29,9 @@ const UsersDetails = ({userID, isPending}) => {
                 <UserBookings id={userID}/>
             </Suspense>
 
-            <Suspense fallback={<p>Loading user todos...</p>}>
+            {/* <Suspense fallback={<p>Loading user todos...</p>}>
                 <UserTodos id={userID}/>
-            </Suspense>
+            </Suspense> */}
         </div>
     ) : null
 };
