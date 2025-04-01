@@ -3,7 +3,7 @@ import { Suspense } from "react";
 
 const Img = ({src, alt, ...props}) => {
     const {data: imgObject} = useQuery({
-        queryKey: src,
+        queryKey: [src],
         queryFn: () => new Promise((resolve) => {
             const img = new Image();
             img.onload = () => resolve(img);

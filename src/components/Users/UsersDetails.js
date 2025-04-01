@@ -1,6 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import getData from "../../util/api";
 import Avatar from "./Avatar";
+import { Suspense } from "react";
+import UserBookings from "./UserBooking";
+import UserTodos from "./UserTodos";
 
 const UsersDetails = ({userID, isPending}) => {
     const {data: user} = useQuery({
@@ -21,6 +24,14 @@ const UsersDetails = ({userID, isPending}) => {
                 <h3>{user.title}</h3>
                 <p>{user.notes}</p>
             </div>
+
+            <Suspense fallback={<p>Loading user bookings...</p>}>
+                <UserBookings id={userID}/>
+            </Suspense>
+
+            <Suspense fallback={<p>Loading user todos...</p>}>
+                <UserTodos id={userID}/>
+            </Suspense>
         </div>
     ) : null
 };
